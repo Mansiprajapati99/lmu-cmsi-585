@@ -1,50 +1,17 @@
 
 // *********************************************  1   **********************************************************
-export function change(x)
+export function change(value)
 {
-  var total = [];
-  if(x < 0)
+  if(value < 0)
   {
-    throw new RangeError("amount cannot be negative");
-
-  }else
-  {
-    //console.log("Valid number for computation");
-    var quarters = 0; // 25
-    var dimes = 0; // 10
-    var nickels = 0; // 5
-    var pennies = 0; // 1
-    
-    while(x >= 25)
-    {
-      x -= 25;
-      quarters ++
-      
-    }
-    while(x >= 10)
-    {
-      x -= 10;
-      dimes++;
-    }
-    while(x >= 5)
-    {
-      x -= 5;
-      nickels++;
-    }
-    while(x < 5)
-    {
-      if(x >= 1){
-        x -= 1;
-        pennies++;
-      }
-      pennies=pennies+x // rest of amount < 1 
-    }
-   
-  }
- total.push(quarters,dimes,nickels,pennies);
- return total;
- 
-  
+    throw new RangeError('Non Negative')//for negative value
+  } 
+  let totalCount = [];
+  [25,10,5,1].forEach(coin => {
+    totalCount.push(Math.floor(value/coin));//given value is devide by coin amount(i.e 25 ,10...)
+    value %= coin;//module them
+  });
+  return totalCount;
 };
 
 // *********************************************  2    **********************************************************
@@ -88,30 +55,24 @@ export function say(args)
 {   
     const arr = [];
     function finalString(fullString){
-        if(fullString === 0){
-            return arr.join('');//collect all words
+        if(fullString === undefined){
+            return arr.join(' ');//collect all words
         }
        arr.push(fullString);//Getting full string
        return finalString;
     }
     return finalString(args);//go to function
-};
+}
   
   
   // *********************************************  4    **********************************************************
  
-  export function powers(value,maxVal,fun){
-    if(value === 1)
-    {
-      fun(value);//1 value go to function
-    }else{
-      second(value,maxVal,fun);
-    }
-  }
-  function second(value,maxVal,fun){
+  
+  export function powers(value,maxVal,callback){
     for(let i = 1 ; i <= maxVal; i = i*value)
     {
-       return(i);//perform multiplication then go to function
+      callback(i);//applying callback to self function
+      
     }
   }
   
@@ -121,11 +82,34 @@ export function say(args)
 
  export  function interleave(a,...theArgs)
 {
-    const firstArray = a;
-    const restArgs = theArgs;
-    const final = [...firstArray,...restArgs]
-    return final;
+    let firstArray = a;
+    let restArgs = theArgs;
+    let finalStr = [];//present final ans
+    let i=0;;
+    let j=0;
+    for(i =0;i<firstArray.length && i < restArgs.length ; i++)//getting all
+    {
+        finalStr[j++] = firstArray[i];
+        finalStr[j++] = restArgs[i];
+
+    }
+    if(firstArray.length == i)//first array
+    {
+      while(i < restArgs.length)
+      {
+        finalStr[j++] = restArgs[i];
+        i++;
+      }
+    }else{
+      while(i < firstArray.length)//second array
+      {
+        finalStr[j++] = firstArray[i];
+        i++;
+      }
+    }
+    return finalStr;
 }
+
 
 
 // *********************************************  5    **********************************************************
@@ -149,27 +133,37 @@ p.next();
  
 
 export function makeCryptoFunctions(key,args,vector)
-{
-    var crypto = require('crypto');
-    const mykey = crypto.createCipheriv(args, key, vector);
-    var mystr = mykey.update('hello there', 'utf8', 'hex')
+{   
+    function e(data){
+    if(data != undefined)
+    {
+    let crypto = require('crypto');
+    let mykey = crypto.createCipheriv(args, key, vector);//pass key,args,vector
+    let mystr = mykey.update(data, 'utf8', 'hex');//pass string in data
     mystr += mykey.final('hex');
-    return mystr;
-
-    var mynewkey = crypto.createDecipheriv(args, key, vector);
-    var mynewstr = mynewkey.update('b97280f15b0e11b5c84c786ea3a51562', 'hex', 'utf8')
+    return mystr;// get hex string
+    }
+  }
+    function d(data){
+    if(data != undefined)
+    {
+    let crypto = require('crypto');
+    let mynewkey = crypto.createDecipheriv(args, key, vector);
+    let mynewstr = mynewkey.update(data, 'hex', 'utf8');//pass hex string
     mynewstr += mynewkey.final('utf8');
-    return mynewstr;
-
+    return mynewstr;// get string
+    }
+  }
+    return (e,d);
 }
 
 
 // *********************************************    9    **********************************************************
-
-export async function pokemonSprites(name) {
-  const url = `https://pokeapi.co/api/v2/pokemon/${name}/`;
-  const response = await fetch(url);
-  const pokemon = await response.json();
+import fetch from 'node-fetch';//import node fetch
+export async function pokemonSprites(getVal) {
+  const url = `https://pokeapi.co/api/v2/pokemon/${getVal}/`;
+  const res = await fetch(url);
+  const pokemon = await res.json();
   return await pokemon.sprites;
 }
 
