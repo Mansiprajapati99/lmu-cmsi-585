@@ -131,38 +131,37 @@ p.next();
 
 // *********************************************  8    **********************************************************
  
-
 export function makeCryptoFunctions(key,args,vector)
-{   
+{
     function e(data){
     if(data != undefined)
     {
-    let crypto = require('crypto');
-    let mykey = crypto.createCipheriv(args, key, vector);//pass key,args,vector
-    let mystr = mykey.update(data, 'utf8', 'hex');//pass string in data
-    mystr += mykey.final('hex');
-    return mystr;// get hex string
+    let crypto = require("crypto");
+    let mykey = crypto.createCipheriv(args, key, vector);//pass key , algo ,vactor
+    let mystr = mykey.update(data, "utf8", "hex");// pass string as data
+    mystr += mykey.final("hex");//create hex string
+    return mystr;
     }
   }
     function d(data){
     if(data != undefined)
     {
-    let crypto = require('crypto');
+    let crypto = require("crypto");
     let mynewkey = crypto.createDecipheriv(args, key, vector);
-    let mynewstr = mynewkey.update(data, 'hex', 'utf8');//pass hex string
-    mynewstr += mynewkey.final('utf8');
-    return mynewstr;// get string
+    let mynewstr = mynewkey.update(data, "hex", "utf8");//pass hex string
+    mynewstr += mynewkey.final("utf8");//generate string
+    return mynewstr;
     }
   }
-    return (e,d);
+    return [e,d]
 }
 
 
 // *********************************************    9    **********************************************************
 import fetch from 'node-fetch';//import node fetch
 export async function pokemonSprites(getVal) {
-  const url = `https://pokeapi.co/api/v2/pokemon/${getVal}/`;
-  const res = await fetch(url);
+  const url = `https://pokeapi.co/api/v2/pokemon/${getVal}/`;//pass url
+  const res = await fetch(url);//get response
   const pokemon = await res.json();
   return await pokemon.sprites;
 }
