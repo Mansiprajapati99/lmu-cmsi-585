@@ -1,4 +1,3 @@
-
 #**********************************************    1    **********************************************************
 def change(amount)
     raise RangeError if amount < 0 #check minus values
@@ -56,24 +55,54 @@ end
 end
 
 
- #**********************************************     6  **********************************************************
+ #**********************************************     6    **********************************************************
 
-
+def say
+    ->(str = nil) do # lambda with string is nil
+        fullstr= []
+        addAll = ->(nextStr = nil)do # if next string is nill
+            return fullstr.join(' ') if nextStr.nil? 
+            fullstr << nextStr #add string
+            addAll
+        end
+        addAll[str] 
+     end
+end
 
 
   #**********************************************    7   **********************************************************
 
-
   class Array
     def interleave (*args)
-
-     # output = self.zip(args).flatten.compact
-     # output
+      final = []
+      min_length = [self.length, args.length].min  #find min length
+      0.upto(min_length-1) do |i|
+        final << self[i] << args[i] # add ony by one value in final
+      end
+      [*final, *self[min_length..self.length], *args[min_length..args.length]] # all values , first string , second string
     end
-    self.interleave(*args)
   end
-  
-#['a', 'b'].interleave(1, 2, true, nil)
 
+
+     #**********************************************    8   **********************************************************
 
    
+    def pokemon_sprites (val)
+        require 'net/http'
+        require 'json'
+        
+        url = 'https://pokeapi.co/api/v2/pokemon/' +  val + '/' #set url with args
+        uri = URI(url)
+        response = Net::HTTP.get(uri) #get response
+        if response == "Not Found"      # apply condition for response found or not
+            raise "API responded with 404"
+        else
+            JSON.parse(response)['sprites']
+        end
+    end
+
+     #***************************************** THANK YOU  *************************************
+
+     
+
+
