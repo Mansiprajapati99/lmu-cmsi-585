@@ -10,10 +10,10 @@ change(Args) ->
 
 if 
     Args < 0 -> 
-        %io:fwrite(False,"amount cannot be negative"); 
+        %check for minus number
         {false,"amount cannot be negative"};
     true -> 
-         Quarter = Args div 25,
+         Quarter = Args div 25,  
          Rest25 = Args rem 25,
          Dim = Rest25 div 10,
          Rest10 = Rest25 rem 10,
