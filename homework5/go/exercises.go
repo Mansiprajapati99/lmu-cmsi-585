@@ -2,13 +2,13 @@
 package rowsums
 func sum(array []int,channelOdd chan<- int,channelEven chan<-int){
 	sumAll := 0
-	for _,arr := range array{ //{{3}, {5, -2}, {9, 1, 5}}
-	sumAll += arr // {9+1+5=15}
+	for _,arr := range array{ 
+	sumAll += arr 
 	}
 	if len(array)%2 == 0{
-		channelEven <- sumAll //3
+		channelEven <- sumAll 
 	}else{
-		channelOdd <- sumAll //15+3 = 18
+		channelOdd <- sumAll 
 	}
 }
 func RowSums(arr [][]int)(int,int){
@@ -18,19 +18,19 @@ func RowSums(arr [][]int)(int,int){
 	totalOddnNo := 0
 	finalOdd := 0
 	finalEven := 0
-	for _,eachArr := range arr{//{{3}, {5, -2}, {9, 1, 5}}
-		go sum(eachArr,channelOdd,channelEven)// function for each element sum
+	for _,eachArr := range arr{
+		go sum(eachArr,channelOdd,channelEven)
 		if len(eachArr)%2 == 0{
-			totalEvenNo++ //{5, -2}
+			totalEvenNo++ 
 		}else{
-			totalOddnNo++  //{3},{9, 1, 5}
+			totalOddnNo++  
 		}
 	}
-	for i:= 0; i < totalOddnNo;i++{ // odd value count and add
-		finalOdd += <-channelOdd //channel send all odd value in finalOdd
+	for i:= 0; i < totalOddnNo;i++{ 
+		finalOdd += <-channelOdd 
 	}
-	for i:= 0; i < totalEvenNo;i++{ // even value count and add
-		finalEven += <-channelEven////channel send all even value in finalEven
+	for i:= 0; i < totalEvenNo;i++{ 
+		finalEven += <-channelEven
 	}
 	return finalEven,finalOdd
 }
