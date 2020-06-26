@@ -1,8 +1,7 @@
-
 -module(strangeserver).
--export([start/0]).
+-export([serve/0]).
 
-start() ->
+serve() ->
     receive
         {multiply,A,B,Pid} ->
             Pid ! A*B;
@@ -16,5 +15,6 @@ start() ->
         after 3100 ->
             io:format("I am bored~n",[])
     end,
-start().
+serve().
+ 
  
